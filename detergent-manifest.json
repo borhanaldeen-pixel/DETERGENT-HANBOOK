@@ -1,0 +1,25 @@
+{
+  "name": "Detergent Powder Hand Book",
+  "short_name": "Detergent Book",
+  "description": "كتيب صناعة مسحوق الغسيل - العمليات الصناعية والمواد الخام",
+  "start_url": "./detergent-handbook.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111111",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "detergent-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "detergent-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
