@@ -1,37 +1,59 @@
-const CACHE_NAME = "detergent-handbook-v" + Date.now();
+// اسم مخزن الكاش - قم بتغيير الرقم عند كل تحديث للتطبيق حتى يتم تحديث النسخة المخزنة
+const CACHE_NAME = 'detergent-handbook-cache-v1';
+
+// الملفات الأساسية التي يتم تخزينها للعمل بدون إنترنت
 const ASSETS_TO_CACHE = [
-  "./detergent-handbook.html",
-  "./detergent-manifest.json",
-  "./detergent-icon-192.png",
-  "./detergent-icon-512.png"
+  './',
+  './index.html',
+  './detergent-manifest.json',
+  './detergent-icon-192.png',
+  './detergent-icon-512.png'
 ];
 
-self.addEventListener("install", (event) => {
+// عند تثبيت الـ Service Worker: نخزن الملفات الأساسية في الكاش
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
   self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
+// عند التفعيل: نحذف أي نسخ كاش قديمة لا تطابق النسخة الحالية
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      )
-    )
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      );
+    })
   );
   self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
+// عند كل طلب: نحاول الشبكة أولاً، وإذا فشلت (بدون إنترنت) نستخدم النسخة المخزنة في الكاش
+self.addEventListener('fetch', (event) => {
+  // نتجاهل الطلبات التي ليست GET
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        // تحديث الكاش بأحدث نسخة من الملف عند نجاح الاتصال بالإنترنت
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
         return response;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => {
+        // في حالة عدم توفر إنترنت، نرجع النسخة المخزنة سابقاً
+        return caches.match(event.request).then((cachedResponse) => {
+          return cachedResponse || caches.match('./index.html');
+        });
+      })
   );
 });

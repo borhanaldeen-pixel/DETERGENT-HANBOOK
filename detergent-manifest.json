@@ -1,25 +1,39 @@
 {
-  "name": "Detergent Powder Hand Book",
+  "name": "Detergent Powder Hand Book - كتيب صناعة مسحوق الغسيل",
   "short_name": "Detergent Book",
-  "description": "كتيب صناعة مسحوق الغسيل - العمليات الصناعية والمواد الخام",
-  "start_url": "./detergent-handbook.html",
+  "description": "دليل شامل لعمليات صناعة مسحوق الغسيل ببرج التجفيف والمواد الخام والأسرار الصناعية",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#111111",
+  "background_color": "#F5F5F5",
   "theme_color": "#111111",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
       "src": "detergent-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "detergent-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "detergent-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "detergent-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
